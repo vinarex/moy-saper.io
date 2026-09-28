@@ -63,10 +63,30 @@ button.on{outline:2px solid var(--flag)}
 #toast{position:absolute;left:50%;bottom:86px;transform:translate(-50%,10px);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;background:var(--bg1);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:800;font-size:14px;max-width:90%;text-align:center;box-shadow:0 8px 20px -10px rgba(0,0,0,.4)}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.col{display:flex;flex-direction:column;gap:12px}
+.hide{display:none!important}
+.fld{font:inherit;font-size:16px;font-weight:700;padding:11px 14px;border-radius:14px;border:1px solid var(--line);background:var(--glass);color:var(--ink);width:100%}
+.err{color:var(--mine);font-weight:700;font-size:13px;min-height:1em}
+#sideHead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#closeMenu,#tabs{display:none}
+#side section{display:flex;flex-direction:column;gap:12px}
+#tabs{gap:6px;overflow-x:auto;flex-shrink:0;padding-bottom:2px}
+#tabs button{flex:none;font:inherit;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ink);cursor:pointer}
+#tabs button.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
+.round{position:absolute;bottom:18px;width:52px;height:52px;border-radius:50%;font-size:22px;display:none;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);padding:0}
+#menuBtn{right:14px}#modeBtn{left:14px}
+body.touch #modeBtn{display:flex}
+.stat,.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--line);font-weight:700;font-size:14px}
+.stat b{font-variant-numeric:tabular-nums}
+.sw small{display:block;color:var(--muted);font-weight:600;font-size:12px;margin-top:2px;line-height:1.4}
+.sw input{width:22px;height:22px;accent-color:var(--accent);flex:none}
 @media (max-width:700px){
   #app{flex-direction:column;padding:8px;gap:8px}
   #stage{border-radius:20px}
-  #side{width:100%;height:34%;border-radius:20px;padding:14px;gap:10px}
+  #tabs{display:flex}#closeMenu{display:inline-flex}#menuBtn{display:flex}.round{bottom:12px}
+  #side{position:fixed;inset:8px;z-index:20;width:auto;height:auto;border-radius:20px;padding:14px;gap:10px;background:var(--bg1);transform:translateY(105%);opacity:0;pointer-events:none;transition:transform .28s ease,opacity .2s}
+  body.menu #side{transform:none;opacity:1;pointer-events:auto}
+  #side section{display:none}#side section.on{display:flex}
   #hud{left:10px;top:10px;right:10px;gap:6px}
   .chip{padding:6px 10px;border-radius:12px}
   .chip b{font-size:16px}
@@ -89,6 +109,8 @@ button.on{outline:2px solid var(--flag)}
     </div>
     <button id="cash" disabled>💰 Забрать очки</button>
     <div id="toast"></div>
+    <button class="round glass" id="modeBtn" title="Режим нажатия">⛏</button>
+    <button class="round glass" id="menuBtn" aria-label="Меню">☰</button>
     <div id="over">
       <div class="box">
         <div class="ttl" id="ttl">💥 Бабах!</div>
@@ -103,19 +125,51 @@ button.on{outline:2px solid var(--flag)}
     </div>
   </div>
   <aside id="side" class="glass">
-    <h1>Бесконечный <span>сапёр</span></h1>
-    <div class="row">
-      <button class="btn primary" id="newBtn">Новая игра</button>
-      <button class="btn" id="flagBtn" title="Режим флажка (для тачскрина)">🚩 Флажок</button>
-    </div>
-    <button class="btn" id="dailyBtn" style="width:100%">🔥 Вызов дня</button>
-    <h2 id="lbTitle">Лидеры</h2>
-    <ol id="lb"></ol>
-    <h2>Достижения</h2>
-    <div class="badges" id="ach"></div>
-    <details id="helpBox"><summary>Как играть</summary>
-    <div class="help">ЛКМ — открыть клетку, ПКМ — флажок. На тачскрине долгий тап ставит флажок.<br>Клик по числу, вокруг которого стоит нужное число флажков, открывает остальных соседей.<br>Двигай поле мышью, стрелками, WASD или пальцем, масштаб — колесом или щипком.<br>Очки не начисляются за пустые клетки. Чем дальше от старта, тем гуще мины — поле слегка темнеет.<br>🔍 Сканер подсвечивает мины вокруг себя. 🛡️ Щит один раз спасёт от взрыва.<br><b>Забрать очки</b> — сохранить 100%. Взорвёшься — сохранится только половина.<br>🔥 <b>Вызов дня</b> — у всех одна и та же карта на сегодня, есть отдельная таблица и серия дней подряд.<br>🌐 рядом с «Лидеры» значит рейтинг общий для всех; «(локально)» — только в этом браузере.</div>
-    </details>
+    <div id="sideHead"><h1>Бесконечный <span>сапёр</span></h1><button class="btn" id="closeMenu" aria-label="Закрыть">✕</button></div>
+    <nav id="tabs">
+      <button data-tab="play" class="on">Игра</button><button data-tab="board">Лидеры</button><button data-tab="profile">Профиль</button><button data-tab="settings">Настройки</button><button data-tab="help">Как играть</button>
+    </nav>
+    <section data-tab="play" class="on">
+      <div class="row">
+        <button class="btn primary" id="newBtn">Новая игра</button>
+        <button class="btn" id="flagBtn" title="Режим флажка">🚩 Флажок</button>
+      </div>
+      <button class="btn" id="dailyBtn" style="width:100%">🔥 Вызов дня</button>
+    </section>
+    <section data-tab="board">
+      <h2 id="lbTitle">Лидеры</h2>
+      <ol id="lb"></ol>
+    </section>
+    <section data-tab="profile">
+      <h2>Профиль</h2>
+      <div id="authBox" class="col">
+        <div class="help">Войди, чтобы попадать в общий рейтинг и хранить статистику на всех устройствах. Нового ника ещё нет — придумай ник и пароль и нажми «Создать профиль».</div>
+        <input class="fld" id="aNick" maxlength="16" placeholder="Ник" autocomplete="username" autocapitalize="off">
+        <input class="fld" id="aPass" type="password" placeholder="Пароль (от 6 символов)" autocomplete="current-password">
+        <div id="aErr" class="err"></div>
+        <div class="row"><button class="btn primary" id="aLogin">Войти</button><button class="btn" id="aReg">Создать профиль</button></div>
+        <div class="help">Пароль восстановить нельзя — запомни его.</div>
+      </div>
+      <div id="profBox" class="col hide">
+        <div class="stat">Игрок<b id="pName">Гость</b></div>
+        <div class="stat">Личный рекорд<b id="pBest">0</b></div>
+        <div class="stat">Игр сыграно<b id="pGames">0</b></div>
+        <div class="stat">Раз забрал очки<b id="pBank">0</b></div>
+        <div class="stat">Серия дней<b id="pStreak">0</b></div>
+        <div class="stat">Достижения<b id="pAch">0</b></div>
+        <div class="badges" id="ach"></div>
+        <button class="btn" id="aOut">Выйти</button>
+      </div>
+    </section>
+    <section data-tab="settings">
+      <h2>Настройки</h2>
+      <label class="sw"><span>Флажок по нажатию<small>Тап ставит флажок вместо открытия клетки. На телефоне включено по умолчанию, на ПК выключено.</small></span><input type="checkbox" id="setTapFlag"></label>
+      <label class="sw"><span>Вибрация<small>Отклик при флажках, бонусах и достижениях</small></span><input type="checkbox" id="setVibe"></label>
+    </section>
+    <section data-tab="help">
+      <h2>Как играть</h2>
+      <div class="help">ЛКМ — открыть клетку, ПКМ — флажок. На тачскрине долгий тап ставит флажок.<br>Клик по числу, вокруг которого стоит нужное число флажков, открывает остальных соседей.<br>Двигай поле мышью, стрелками, WASD или пальцем, масштаб — колесом или щипком.<br>Очки не начисляются за пустые клетки. Чем дальше от старта, тем гуще мины — поле слегка темнеет.<br>🔍 Сканер подсвечивает мины вокруг себя. 🛡️ Щит один раз спасёт от взрыва.<br><b>Забрать очки</b> — сохранить 100%. Взорвёшься — сохранится только половина.<br>🔥 <b>Вызов дня</b> — у всех одна и та же карта на сегодня, есть отдельная таблица и серия дней подряд.<br>🌐 рядом с «Лидеры» значит рейтинг общий для всех; «(локально)» — только в этом браузере.</div>
+    </section>
   </aside>
 </div>
 <script>
@@ -213,7 +267,7 @@ var ACHIEVEMENTS=[
 ];
 function loadAch(){try{var o=JSON.parse(localStorage.getItem(ACH_KEY)||"{}");return (o&&typeof o==="object")?o:{}}catch(e){return {}}}
 function saveAch(o){try{localStorage.setItem(ACH_KEY,JSON.stringify(o))}catch(e){}}
-function unlockAch(id,title){var o=loadAch();if(o[id])return;o[id]=true;saveAch(o);toast("🏆 Достижение: "+title);vib(35);renderAch()}
+function unlockAch(id,title){var o=loadAch();if(o[id])return;o[id]=true;saveAch(o);syncSoon();toast("🏆 Достижение: "+title);vib(35);renderAch()}
 function renderAch(){
   var o=loadAch(), box=$("ach"); box.innerHTML="";
   ACHIEVEMENTS.forEach(function(a){
@@ -293,15 +347,17 @@ function finish(cashed){
   if(cashed)unlockAch("first_bank","Первая заначка");
   if(dailyMode){bumpStreak();renderStreak()}
   finalVal=cashed?score:Math.floor(score/2);
+  var stt=loadStats();stt.games++;if(cashed)stt.cashouts++;if(finalVal>stt.best)stt.best=finalVal;saveStats(stt);syncSoon();
   if(finalVal<=0){setTimeout(newGame,900);return}
   $("ttl").textContent=cashed?"💰 Очки в банке!":"💥 Бабах!";
   $("finalScore").textContent=finalVal;
-  $("sub").textContent="Набрано "+score+" · сохранено "+(cashed?"100%":"50%");
+  $("sub").textContent="Набрано "+score+" · сохранено "+(cashed?"100%":"50%")+(auth?"":" · войди в профиль, чтобы попасть в общий рейтинг");
   setTimeout(function(){
     if(!over)return;
     $("over").style.display="flex";
+    $("name").style.display=auth?"none":"";
     try{$("name").value=localStorage.getItem("infmine_name")||""}catch(e){}
-    setTimeout(function(){$("name").focus()},60);
+    if(!auth)setTimeout(function(){$("name").focus()},60);
   },MOT?(cashed?350:1000):0);
 }
 var tt=0;
@@ -309,10 +365,11 @@ function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");clear
 async function submit(save){
   var msg="";
   if(save){
-    var nm=normName($("name").value)||"Аноним", id=nameId(nm);
+    var nm=auth?auth.name:(normName($("name").value)||"Аноним"), id=nameId(nm);
     try{localStorage.setItem("infmine_name",nm)}catch(e){}
     var path=dailyMode?("daily/"+todayStr()):"leaderboard";
-    var ok=await fbPush(path,{name:nm,score:finalVal});
+    var ok=false;
+    if(auth){var pr2=await fbAuth("POST",path,{name:nm,score:finalVal,uid:auth.uid});ok=!!pr2.ok}
     if(ok){
       msg="🌐 Результат отправлен в общий рейтинг"+(dailyMode?" дня":"");
     }else{
@@ -337,7 +394,8 @@ $("skipBtn").onclick=function(){submit(false)};
 $("newBtn").onclick=newGame;
 $("cash").onclick=function(){finish(true)};
 $("name").addEventListener("keydown",function(e){if(e.key==="Enter")submit(true)});
-$("flagBtn").onclick=function(){flagMode=!flagMode;this.classList.toggle("on",flagMode)};
+$("flagBtn").onclick=function(){setFlagMode(!flagMode,true)};
+$("modeBtn").onclick=function(){setFlagMode(!flagMode,true)};
 $("dailyBtn").onclick=function(){dailyMode=!dailyMode;this.classList.toggle("on",dailyMode);this.textContent=dailyMode?"🔥 Обычная игра":"🔥 Вызов дня";newGame();renderLB();};
 
 function resize(){var r=cv.getBoundingClientRect();dpr=window.devicePixelRatio||1;cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);draw()}
@@ -400,7 +458,7 @@ function draw(){
 }
 
 var drag=null, pts=new Map(), pinch=null, pressT=null, pressFired=false;
-function vib(ms){if(navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
+function vib(ms){if(settings&&settings.vibe===false)return;if(navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
 function cellAt(e){var r=cv.getBoundingClientRect(),s=CELL*zoom;return {x:Math.floor((e.clientX-r.left-r.width/2)/s+cam.x),y:Math.floor((e.clientY-r.top-r.height/2)/s+cam.y)}}
 function cellAtF(e){var r=cv.getBoundingClientRect(),s=CELL*zoom;return {x:(e.clientX-r.left-r.width/2)/s+cam.x,y:(e.clientY-r.top-r.height/2)/s+cam.y}}
 cv.addEventListener("contextmenu",function(e){e.preventDefault()});
@@ -463,7 +521,118 @@ window.addEventListener("keydown",function(e){
   if(m){e.preventDefault();draw()}
 });
 
-if(window.innerWidth>700)$("helpBox").open=true;
+var SET_KEY="infmine_settings_v1",ST_KEY="infmine_stats_v1",IS_TOUCH=!!(window.matchMedia&&matchMedia("(pointer:coarse)").matches);
+function loadSet(){var d={tapFlag:IS_TOUCH,vibe:true};try{var o=JSON.parse(localStorage.getItem(SET_KEY)||"null");if(o&&typeof o==="object"){if(typeof o.tapFlag==="boolean")d.tapFlag=o.tapFlag;if(typeof o.vibe==="boolean")d.vibe=o.vibe}}catch(e){}return d}
+var settings=loadSet();
+function saveSet(){try{localStorage.setItem(SET_KEY,JSON.stringify(settings))}catch(e){}}
+function loadStats(){try{var o=JSON.parse(localStorage.getItem(ST_KEY)||"null");if(o)return {games:o.games|0,cashouts:o.cashouts|0,best:o.best|0}}catch(e){}return {games:0,cashouts:0,best:0}}
+function saveStats(o){try{localStorage.setItem(ST_KEY,JSON.stringify(o))}catch(e){}}
+function setFlagMode(v,persist){flagMode=v;$("flagBtn").classList.toggle("on",v);$("modeBtn").textContent=v?"🚩":"⛏";$("modeBtn").title=v?"Тап ставит флажок":"Тап открывает клетку";$("setTapFlag").checked=v;if(persist){settings.tapFlag=v;saveSet()}}
+$("setTapFlag").onchange=function(){setFlagMode(this.checked,true)};
+$("setVibe").checked=settings.vibe;
+$("setVibe").onchange=function(){settings.vibe=this.checked;saveSet();if(this.checked)vib(15)};
+function renderProfile(){
+  var st=loadStats(),o=loadAch(),nm="",n=0;try{nm=localStorage.getItem("infmine_name")||""}catch(e){}
+  ACHIEVEMENTS.forEach(function(a){if(o[a.id])n++});
+  $("pName").textContent=auth?auth.name:(nm||"Гость");$("pBest").textContent=st.best;$("pGames").textContent=st.games;$("pBank").textContent=st.cashouts;
+  $("pStreak").textContent=$("streakChip").style.display==="none"?0:$("streak").textContent;$("pAch").textContent=n+" / "+ACHIEVEMENTS.length;
+}
+var curTab="play";
+function showTab(t){
+  curTab=t;
+  document.querySelectorAll("#tabs button").forEach(function(b){b.classList.toggle("on",b.dataset.tab===t)});
+  document.querySelectorAll("#side section").forEach(function(x){x.classList.toggle("on",x.dataset.tab===t)});
+  if(t==="profile")renderProfile(); if(t==="board")renderLB();
+}
+function openMenu(){document.body.classList.add("menu");showTab(curTab)}
+function closeMenu(){document.body.classList.remove("menu")}
+document.querySelectorAll("#tabs button").forEach(function(b){b.onclick=function(){showTab(b.dataset.tab)}});
+$("menuBtn").onclick=openMenu;$("closeMenu").onclick=closeMenu;
+["newBtn","dailyBtn"].forEach(function(id){$(id).addEventListener("click",closeMenu)});
+window.addEventListener("keydown",function(e){if(e.key==="Escape")closeMenu()});
+var FB_KEY="AIzaSyDK5cvtxknUSbHm59Kfaqss85hHWVVK1qs",AUTH_KEY="infmine_auth_v1",auth=null,syncT=0;
+try{auth=JSON.parse(localStorage.getItem(AUTH_KEY)||"null")}catch(e){auth=null}
+if(!(auth&&auth.uid&&auth.refreshToken&&auth.name))auth=null;
+function saveAuth(){try{if(auth)localStorage.setItem(AUTH_KEY,JSON.stringify(auth));else localStorage.removeItem(AUTH_KEY)}catch(e){}}
+async function nickEmail(nick){
+  if(!(window.crypto&&crypto.subtle))throw new Error("NO_CRYPTO");
+  var d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("saper:"+nameId(nick)));
+  return "n"+Array.from(new Uint8Array(d)).map(function(b){return ("0"+b.toString(16)).slice(-2)}).join("").slice(0,40)+"@saper.example.com";
+}
+async function idCall(kind,nick,pass){
+  var email=await nickEmail(nick);
+  var r=await fetch("https://identitytoolkit.googleapis.com/v1/accounts:"+kind+"?key="+FB_KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,password:pass,returnSecureToken:true})});
+  var j=await r.json(); if(!r.ok)throw new Error((j.error&&j.error.message)||"ERR"); return j;
+}
+function authErr(e){
+  var m=String(e&&e.message||e);
+  if(e instanceof TypeError)return "Нет связи с сервером (в предпросмотре Claude вход недоступен — только на GitHub Pages)";
+  if(m.indexOf("EMAIL_EXISTS")===0)return "Этот ник уже занят";
+  if(/EMAIL_NOT_FOUND|INVALID_PASSWORD|INVALID_LOGIN_CREDENTIALS/.test(m))return "Неверный ник или пароль";
+  if(m.indexOf("WEAK_PASSWORD")===0)return "Пароль слишком простой — минимум 6 символов";
+  if(m.indexOf("TOO_MANY_ATTEMPTS")===0)return "Слишком много попыток, попробуй позже";
+  if(m.indexOf("OPERATION_NOT_ALLOWED")===0)return "Вход по паролю не включён в Firebase";
+  if(m==="NO_CRYPTO")return "Вход работает только на защищённой (https) странице";
+  return "Ошибка: "+m;
+}
+async function authToken(){
+  if(!auth)return null;
+  if(Date.now()<auth.exp-60000)return auth.idToken;
+  try{
+    var r=await fetch("https://securetoken.googleapis.com/v1/token?key="+FB_KEY,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"grant_type=refresh_token&refresh_token="+encodeURIComponent(auth.refreshToken)});
+    var j=await r.json(); if(!r.ok)throw 0;
+    auth.idToken=j.id_token;auth.refreshToken=j.refresh_token;auth.exp=Date.now()+parseInt(j.expires_in,10)*1000;saveAuth();return auth.idToken;
+  }catch(e){return null}
+}
+async function fbAuth(method,path,obj){
+  var t=await authToken(); if(!t)return {ok:false};
+  try{
+    var r=await fetch(FIREBASE_URL+"/"+path+".json?auth="+encodeURIComponent(t),{method:method,headers:{"Content-Type":"application/json"},body:obj===undefined?undefined:JSON.stringify(obj)});
+    if(!r.ok)return {ok:false}; return {ok:true,data:await r.json()};
+  }catch(e){return {ok:false}}
+}
+async function syncProfile(){
+  if(!auth)return;
+  var pr=await fbAuth("GET","users/"+auth.uid); if(!pr.ok)return;
+  var rd=pr.data||{}, st=loadStats(), o=loadAch();
+  st.games=Math.max(st.games,rd.games|0);st.cashouts=Math.max(st.cashouts,rd.cashouts|0);st.best=Math.max(st.best,rd.best|0);
+  var ra=rd.ach||{};Object.keys(ra).forEach(function(k){if(ra[k]===true)o[k]=true});
+  saveStats(st);saveAch(o);renderAch();
+  await fbAuth("PATCH","users/"+auth.uid,{best:st.best,games:st.games,cashouts:st.cashouts,ach:o});
+  renderProfile();
+}
+function syncSoon(){clearTimeout(syncT);syncT=setTimeout(syncProfile,1500)}
+function renderAuth(){
+  $("authBox").classList.toggle("hide",!!auth);$("profBox").classList.toggle("hide",!auth);
+}
+async function doAuth(kind){
+  var nick=normName($("aNick").value),pass=$("aPass").value,er=$("aErr");
+  er.textContent="";
+  if(nick.length<2||nick.length>16){er.textContent="Ник — от 2 до 16 символов";return}
+  if(pass.length<6){er.textContent="Пароль — минимум 6 символов";return}
+  $("aLogin").disabled=$("aReg").disabled=true;
+  try{
+    var j=await idCall(kind,nick,pass);
+    auth={uid:j.localId,name:nick,idToken:j.idToken,refreshToken:j.refreshToken,exp:Date.now()+parseInt(j.expiresIn,10)*1000};
+    saveAuth();
+    var pr=await fbAuth("GET","users/"+auth.uid);
+    if(pr.ok&&pr.data&&pr.data.name){auth.name=pr.data.name;saveAuth()}
+    else if(pr.ok){var w=await fbAuth("PUT","users/"+auth.uid,{name:nick});if(!w.ok)er.textContent="Профиль создан, но база не приняла запись — проверь правила Firebase"}
+    else er.textContent="Вход выполнен, но база данных не отвечает — проверь правила Firebase";
+    try{localStorage.setItem("infmine_name",auth.name)}catch(e){}
+    $("aPass").value="";
+    await syncProfile();
+  }catch(e){er.textContent=authErr(e);auth=null;saveAuth()}
+  $("aLogin").disabled=$("aReg").disabled=false;
+  renderAuth();renderProfile();
+}
+$("aLogin").onclick=function(){doAuth("signInWithPassword")};
+$("aReg").onclick=function(){doAuth("signUp")};
+$("aOut").onclick=function(){auth=null;saveAuth();renderAuth();renderProfile()};
+$("aPass").addEventListener("keydown",function(e){if(e.key==="Enter")doAuth("signInWithPassword")});
+renderAuth(); if(auth)syncProfile();
+if(IS_TOUCH)document.body.classList.add("touch");
+setFlagMode(settings.tapFlag,false);
 renderStreak(); renderLB(); renderAch(); resize(); newGame();
 })();
 </script>
