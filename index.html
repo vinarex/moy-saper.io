@@ -10,8 +10,9 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#1b1b20;--bg2:#25242c;--glass:rgba(255,255,255,.06);--board:rgba(255,255,255,.03);--ink:#ecebf0;--muted:#9c9aa6;--line:rgba(255,255,255,.1);--cell:#4a4956;--shade:#34333e;--open:rgba(255,255,255,.07);--mine:#d07886;--flag:#d99a6b;--accent:#8d89b3;--accent2:#a9a5c7}}
 :root[data-theme="dark"]{--bg1:#1b1b20;--bg2:#25242c;--glass:rgba(255,255,255,.06);--board:rgba(255,255,255,.03);--ink:#ecebf0;--muted:#9c9aa6;--line:rgba(255,255,255,.1);--cell:#4a4956;--shade:#34333e;--open:rgba(255,255,255,.07);--mine:#d07886;--flag:#d99a6b;--accent:#8d89b3;--accent2:#a9a5c7}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{height:100%;margin:0;overflow:hidden;color:var(--ink);font-family:"Nunito",ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg1)}
-#app{display:flex;gap:14px;height:100%;padding:14px;background:linear-gradient(135deg,var(--bg1),var(--bg2))}
+#app{display:flex;gap:14px;height:100%;height:100dvh;padding:14px;background:linear-gradient(135deg,var(--bg1),var(--bg2))}
 #stage{position:relative;flex:1;min-width:0;border-radius:26px;overflow:hidden;background:var(--board);border:1px solid var(--line)}
 canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
 .glass{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -43,6 +44,10 @@ button.on{outline:2px solid var(--flag)}
 .badges{display:flex;flex-wrap:wrap;gap:8px}
 .badge{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--glass);border:1px solid var(--line);opacity:.3;filter:grayscale(1);cursor:default}
 .badge.on{opacity:1;filter:none;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 6px 14px -8px var(--accent)}
+#helpBox summary{cursor:pointer;list-style:none;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding:6px 0}
+#helpBox summary::-webkit-details-marker{display:none}
+#helpBox summary::after{content:" ▾"}
+#helpBox[open] summary::after{content:" ▴"}
 .help{font-size:13px;color:var(--muted);line-height:1.55;font-weight:600}
 #over{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(20,15,40,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 #over .box{background:var(--bg1);color:var(--ink);border-radius:26px;padding:26px;width:min(340px,90%);display:flex;flex-direction:column;gap:14px;border:1px solid var(--line);text-align:center;animation:pop .28s cubic-bezier(.2,1.4,.4,1)}
@@ -68,7 +73,6 @@ button.on{outline:2px solid var(--flag)}
   h1{font-size:18px}
   #cash{bottom:12px;padding:12px 20px;font-size:15px}
   #toast{bottom:70px;font-size:13px;padding:8px 14px}
-  .help{display:none}
 }
 </style>
 </head>
@@ -109,8 +113,9 @@ button.on{outline:2px solid var(--flag)}
     <ol id="lb"></ol>
     <h2>Достижения</h2>
     <div class="badges" id="ach"></div>
-    <h2>Как играть</h2>
+    <details id="helpBox"><summary>Как играть</summary>
     <div class="help">ЛКМ — открыть клетку, ПКМ — флажок. На тачскрине долгий тап ставит флажок.<br>Клик по числу, вокруг которого стоит нужное число флажков, открывает остальных соседей.<br>Двигай поле мышью, стрелками, WASD или пальцем, масштаб — колесом или щипком.<br>Очки не начисляются за пустые клетки. Чем дальше от старта, тем гуще мины — поле слегка темнеет.<br>🔍 Сканер подсвечивает мины вокруг себя. 🛡️ Щит один раз спасёт от взрыва.<br><b>Забрать очки</b> — сохранить 100%. Взорвёшься — сохранится только половина.<br>🔥 <b>Вызов дня</b> — у всех одна и та же карта на сегодня, есть отдельная таблица и серия дней подряд.<br>🌐 рядом с «Лидеры» значит рейтинг общий для всех; «(локально)» — только в этом браузере.</div>
+    </details>
   </aside>
 </div>
 <script>
@@ -458,6 +463,7 @@ window.addEventListener("keydown",function(e){
   if(m){e.preventDefault();draw()}
 });
 
+if(window.innerWidth>700)$("helpBox").open=true;
 renderStreak(); renderLB(); renderAch(); resize(); newGame();
 })();
 </script>
