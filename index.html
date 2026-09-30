@@ -44,9 +44,13 @@ button.on{outline:2px solid var(--flag)}
 #lb li .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #lb li .s{font-weight:900;font-variant-numeric:tabular-nums}
 #lb li.empty{color:var(--muted);justify-content:center}
-.badges{display:flex;flex-wrap:wrap;gap:8px}
-.badge{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--glass);border:1px solid var(--line);opacity:.3;filter:grayscale(1);cursor:default}
-.badge.on{opacity:1;filter:none;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 6px 14px -8px var(--accent)}
+.badges{display:flex;flex-direction:column;gap:8px}
+.badge{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--line);opacity:.4;filter:grayscale(1)}
+.badge.on{opacity:1;filter:none}
+.badge .ic{font-size:19px;flex:none;width:26px;text-align:center}
+.badge .tx{display:flex;flex-direction:column;gap:1px;min-width:0}
+.badge .tx b{font-size:13px;font-weight:800}
+.badge .tx span{font-size:11.5px;color:var(--muted);font-weight:600;line-height:1.35}
 #helpBox summary{cursor:pointer;list-style:none;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800;padding:6px 0}
 #helpBox summary::-webkit-details-marker{display:none}
 #helpBox summary::after{content:" ▾"}
@@ -76,9 +80,10 @@ button.on{outline:2px solid var(--flag)}
 #tabs{gap:6px;overflow-x:auto;flex-shrink:0;padding-bottom:2px}
 #tabs button{flex:none;font:inherit;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ink);cursor:pointer}
 #tabs button.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
-.round{position:absolute;bottom:18px;width:52px;height:52px;border-radius:50%;font-size:22px;display:none;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);padding:0}
-#start{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;opacity:1;transition:opacity .25s}
-#start.hidden{opacity:0;pointer-events:none!important}
+.round{position:absolute;bottom:18px;width:52px;height:52px;border-radius:50%;font-size:22px;display:none;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);padding:0;z-index:25}
+body.onstart #hud,body.onstart #cash,body.onstart .round,body.onstart #toast{display:none!important}
+#start{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;justify-content:space-between}
+#start.hidden{display:none}
 #startTitle{pointer-events:none;text-align:center;padding-top:8%;font-size:clamp(24px,4vw,34px);font-weight:900}
 #startTitle span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
 #startPanel{pointer-events:auto;background:linear-gradient(to top,var(--bg1) 45%,transparent);padding:34px 18px 24px;display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -210,7 +215,7 @@ function hex2rgb(h){h=h.replace("#","");if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[
 function mixHex(h1,h2,t){var a=hex2rgb(h1),b=hex2rgb(h2);return "rgb("+Math.round(a[0]+(b[0]-a[0])*t)+","+Math.round(a[1]+(b[1]-a[1])*t)+","+Math.round(a[2]+(b[2]-a[2])*t)+")"}
 var $=function(id){return document.getElementById(id)};
 var born=new Map(),flagBorn=new Map(),overT=0,origin=null,hover=null,anim=0,lastScore=0,MOT=(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)?0:1;
-var shields=0,maxDist=0,recordCelebrated=false,scanInfo=new Map(),kindMap=new Map(),MIN_D=0.12,MAX_D=0.32,GROW_K=16,SCANNER_P=0.010,SHIELD_P=0.008;
+var shields=0,maxDist=0,recordCelebrated=false,scanInfo=new Map(),kindMap=new Map(),MIN_D=0.12,MAX_D=0.32,GROW_K=16,SCANNER_P=0.010,SHIELD_P=0.008,foundShield=false,foundScanner=false;
 var dailyMode=false,classicMode=false,DLB_KEY="infmine_daily_lb_v2",STREAK_KEY="infmine_streak_v1";
 var FIREBASE_URL="https://moy-saper-default-rtdb.firebaseio.com",bestCache=0,dailyBestCache=0,classicBestCache=0,LBC_KEY="infmine_leaderboard_classic_v1";
 async function fbGet(path){try{var r=await fetch(FIREBASE_URL+"/"+path+".json");if(!r.ok)throw 0;return await r.json()}catch(e){return null}}
@@ -275,7 +280,7 @@ function bumpStreak(){
   var o=loadStreak(), t=todayStr();
   if(o.date===t)return o.count;
   var y=new Date();y.setDate(y.getDate()-1);var ys=y.getFullYear()+"-"+pad2(y.getMonth()+1)+"-"+pad2(y.getDate());
-  o.count=(o.date===ys)?o.count+1:1; o.date=t; try{localStorage.setItem(STREAK_KEY,JSON.stringify(o))}catch(e){} if(o.count>=7)unlockAch("streak7","Неделя огня"); return o.count;
+  o.count=(o.date===ys)?o.count+1:1; o.date=t; try{localStorage.setItem(STREAK_KEY,JSON.stringify(o))}catch(e){} if(o.count>=7)unlockAch("streak7","Неделя огня"); if(o.count>=30)unlockAch("streak30","Месяц огня"); return o.count;
 }
 function renderStreak(){
   var o=loadStreak(), t=todayStr(), y=new Date(); y.setDate(y.getDate()-1);
@@ -289,11 +294,16 @@ var ACHIEVEMENTS=[
  {id:"first_bank",icon:"💰",title:"Первая заначка",desc:"Забрал очки в первый раз"},
  {id:"big_flood",icon:"🌊",title:"Цепная реакция",desc:"Открыл 50+ клеток одним кликом"},
  {id:"far_traveler",icon:"🧭",title:"Первопроходец",desc:"Отошёл на 25 клеток от старта"},
+ {id:"far_50",icon:"🚀",title:"Далеко зашёл",desc:"Отошёл на 50 клеток от старта"},
  {id:"shield_save",icon:"🛡️",title:"На волосок",desc:"Щит спас от взрыва"},
  {id:"scanner_used",icon:"🔍",title:"Разведка",desc:"Использовал сканер"},
+ {id:"double_bonus",icon:"✨",title:"Час удачи",desc:"За одну игру нашёл и сканер, и щит"},
  {id:"record_x3",icon:"📈",title:"Не остановить",desc:"Побил личный рекорд трижды"},
+ {id:"century",icon:"💯",title:"Сотка",desc:"Набрал 100+ очков за одну партию"},
  {id:"streak7",icon:"🔥",title:"Неделя огня",desc:"Серия из 7 дней в вызове дня"},
- {id:"eight_neighbor",icon:"8️⃣",title:"Восьмёрка",desc:"Открыл клетку, окружённую 8 минами"}
+ {id:"streak30",icon:"🌟",title:"Месяц огня",desc:"Серия из 30 дней в вызове дня"},
+ {id:"eight_neighbor",icon:"8️⃣",title:"Восьмёрка",desc:"Открыл клетку, окружённую 8 минами"},
+ {id:"classic_run",icon:"🧊",title:"Дедовский способ",desc:"Сыграл партию в «Классике»"}
 ];
 function loadAch(){try{var o=JSON.parse(localStorage.getItem(ACH_KEY)||"{}");return (o&&typeof o==="object")?o:{}}catch(e){return {}}}
 function saveAch(o){try{localStorage.setItem(ACH_KEY,JSON.stringify(o))}catch(e){}}
@@ -302,15 +312,19 @@ function renderAch(){
   var o=loadAch(), box=$("ach"); box.innerHTML="";
   ACHIEVEMENTS.forEach(function(a){
     var un=!!o[a.id];
-    var d=document.createElement("div"); d.className="badge"+(un?" on":""); d.title=a.title+" — "+a.desc+(un?"":" (не получено)"); d.textContent=a.icon;
-    box.appendChild(d);
+    var row=document.createElement("div"); row.className="badge"+(un?" on":"");
+    var ic=document.createElement("div"); ic.className="ic"; ic.textContent=un?a.icon:"🔒";
+    var tx=document.createElement("div"); tx.className="tx";
+    var b=document.createElement("b"); b.textContent=a.title;
+    var sp=document.createElement("span"); sp.textContent=a.desc;
+    tx.appendChild(b); tx.appendChild(sp); row.appendChild(ic); row.appendChild(tx); box.appendChild(row);
   });
 }
 function bumpRecordBeats(){try{var n=(parseInt(localStorage.getItem("infmine_record_beats")||"0",10)||0)+1;localStorage.setItem("infmine_record_beats",String(n));return n}catch(e){return 0}}
 
 function newGame(){
   seed=dailyMode?dailySeed():((Math.random()*4294967296)|0); start=null; revealed=new Set(); flags=new Set(); born=new Map(); flagBorn=new Map(); overT=0; origin=null; lastScore=0;
-  shields=0; maxDist=0; recordCelebrated=false; scanInfo=new Map(); kindMap=new Map();
+  shields=0; maxDist=0; recordCelebrated=false; scanInfo=new Map(); kindMap=new Map(); foundShield=false; foundScanner=false;
   score=0; over=false; hit=null; cam={x:0.5,y:0.5}; zoom=1;
   $("cash").style.display=classicMode?"none":"";
   $("half").parentNode.style.display=classicMode?"none":"";
@@ -346,17 +360,18 @@ function reveal(x,y){
     var c=q.pop(), k=key(c[0],c[1]);
     if(revealed.has(k)||flags.has(k)||isMine(c[0],c[1]))continue;
     revealed.add(k); born.set(k,t0+Math.min(idx++*7,260)); flood++;
-    var n=count(c[0],c[1]); if(classicMode||n>0)score+=1+n;
+    var n=count(c[0],c[1]); if(classicMode||n>0)score+=1+n; if(score>=100)unlockAch("century","Сотка");
     if(n===8)unlockAch("eight_neighbor","Восьмёрка");
-    var d=dist(c[0],c[1]); if(d>maxDist){maxDist=d;if(maxDist>=25)unlockAch("far_traveler","Первопроходец")}
+    var d=dist(c[0],c[1]); if(d>maxDist){maxDist=d;if(maxDist>=25)unlockAch("far_traveler","Первопроходец");if(maxDist>=50)unlockAch("far_50","Далеко зашёл")}
     var bk=bonusKind(c[0],c[1]);
     if(bk){
       kindMap.set(k,bk);
-      if(bk==="shield"){shields=Math.min(5,shields+1);toast("🛡️ +1 щит");vib(15)}
+      if(bk==="shield"){shields=Math.min(5,shields+1);toast("🛡️ +1 щит");vib(15);foundShield=true}
       else{
         for(var sdy=-1;sdy<=1;sdy++)for(var sdx=-1;sdx<=1;sdx++)if(sdx||sdy){var kk=key(c[0]+sdx,c[1]+sdy);if(!revealed.has(kk)&&!flags.has(kk))scanInfo.set(kk,isMine(c[0]+sdx,c[1]+sdy))}
-        toast("🔍 Сканер подсветил соседей"); vib(15); unlockAch("scanner_used","Разведка");
+        toast("🔍 Сканер подсветил соседей"); vib(15); unlockAch("scanner_used","Разведка");foundScanner=true;
       }
+      if(foundShield&&foundScanner)unlockAch("double_bonus","Час удачи");
     }
     if(n===0)for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++)if(dx||dy)q.push([c[0]+dx,c[1]+dy]);
   }
@@ -377,6 +392,7 @@ function toggleFlag(x,y){
 function finish(cashed){
   if(over)return; over=true; overT=performance.now(); updateHUD(); kick();
   if(cashed)unlockAch("first_bank","Первая заначка");
+  if(classicMode)unlockAch("classic_run","Дедовский способ");
   if(dailyMode){bumpStreak();renderStreak()}
   finalVal=classicMode?score:(cashed?score:Math.floor(score/2));
   var stt=loadStats();stt.games++;if(cashed)stt.cashouts++;if(finalVal>stt.best)stt.best=finalVal;saveStats(stt);syncSoon();
@@ -496,7 +512,7 @@ function cellAt(e){var r=cv.getBoundingClientRect(),s=CELL*zoom;return {x:Math.f
 function cellAtF(e){var r=cv.getBoundingClientRect(),s=CELL*zoom;return {x:(e.clientX-r.left-r.width/2)/s+cam.x,y:(e.clientY-r.top-r.height/2)/s+cam.y}}
 cv.addEventListener("contextmenu",function(e){e.preventDefault()});
 cv.addEventListener("pointerdown",function(e){
-  cv.setPointerCapture(e.pointerId);
+  if(e.pointerType==="touch")e.preventDefault();
   pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(pts.size>=2){
     drag=null; clearTimeout(pressT); pressT=null;
@@ -527,9 +543,11 @@ cv.addEventListener("pointermove",function(e){
   if(!drag)return; var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
   if(!drag.moved&&Math.hypot(dx,dy)<5)return;
   drag.moved=true; clearTimeout(pressT);
+  try{cv.setPointerCapture(e.pointerId)}catch(err){}
   cam.x-=dx/(CELL*zoom);cam.y-=dy/(CELL*zoom);drag.x=e.clientX;drag.y=e.clientY;draw();
 });
 function endPoint(e){
+  try{cv.releasePointerCapture(e.pointerId)}catch(err){}
   pts.delete(e.pointerId);
   if(pts.size<2)pinch=null;
   clearTimeout(pressT); pressT=null;
@@ -583,8 +601,8 @@ var selMode=classicMode?"classic":(dailyMode?"daily":"normal");
 function markModeBtns(){document.querySelectorAll(".modeBtn").forEach(function(b){b.classList.toggle("on",b.dataset.mode===selMode)})}
 document.querySelectorAll(".modeBtn").forEach(function(b){b.onclick=function(){selMode=b.dataset.mode;markModeBtns()}});
 document.querySelectorAll("#startMini button").forEach(function(b){b.onclick=function(){openMenu();showTab(b.dataset.tab)}});
-function showStart(){$("start").classList.remove("hidden");cv.style.pointerEvents="none";markModeBtns()}
-function hideStart(){$("start").classList.add("hidden");cv.style.pointerEvents="auto"}
+function showStart(){$("start").classList.remove("hidden");cv.style.pointerEvents="none";document.body.classList.add("onstart");markModeBtns()}
+function hideStart(){$("start").classList.add("hidden");cv.style.pointerEvents="auto";document.body.classList.remove("onstart")}
 $("playBtn").onclick=function(){
   classicMode=selMode==="classic"; dailyMode=selMode==="daily";
   hideStart(); newGame(); renderLB();
