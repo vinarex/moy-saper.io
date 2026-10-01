@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Бесконечный сапёр</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Сапёр">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#7c5cff">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" href="data:image/png;base64,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">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg1:#efece6;--bg2:#e1e0e6;--glass:rgba(255,255,255,.6);--board:rgba(255,255,255,.4);--ink:#2f2f36;--muted:#85838c;--line:rgba(90,90,110,.18);--cell:#cbc8d3;--shade:#aeabba;--open:rgba(255,255,255,.7);--mine:#c96a78;--flag:#d08a5a;--accent:#6e6a8f;--accent2:#8a86a8;--gold1:#dcc196;--gold2:#c79f68;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -77,7 +84,8 @@ button.on{outline:2px solid var(--flag)}
 #sideHead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 #closeMenu,#tabs{display:none}
 #side section{display:flex;flex-direction:column;gap:12px}
-#tabs{gap:6px;overflow-x:auto;flex-shrink:0;padding-bottom:2px}
+#tabs{gap:6px;overflow-x:auto;flex-shrink:0;padding:4px 2px 8px;scrollbar-width:none;-ms-overflow-style:none}
+#tabs::-webkit-scrollbar{display:none}
 #tabs button{flex:none;font:inherit;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ink);cursor:pointer}
 #tabs button.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
 .round{position:absolute;bottom:18px;width:52px;height:52px;border-radius:50%;font-size:22px;display:none;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);padding:0;z-index:25}
@@ -87,15 +95,24 @@ body.onstart #hud,body.onstart #cash,body.onstart .round,body.onstart #toast{dis
 #startTitle{pointer-events:none;text-align:center;padding-top:8%;font-size:clamp(24px,4vw,34px);font-weight:900}
 #startTitle span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
 #startPanel{pointer-events:auto;background:linear-gradient(to top,var(--bg1) 45%,transparent);padding:34px 18px 24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+#startRow{display:flex;gap:10px;width:100%;max-width:300px}
+.circleBtn{width:52px;height:52px;border-radius:50%;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);padding:0;flex:none;border:1px solid var(--line);background:var(--glass)}
 #modeRow{display:flex;gap:8px;width:100%;max-width:420px}
 .modeBtn{flex:1;font:inherit;font-weight:800;font-size:12px;padding:12px 6px;border-radius:16px;border:1px solid var(--line);background:var(--glass);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
 .modeBtn b{font-size:19px}
 .modeBtn.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;box-shadow:0 8px 18px -8px var(--accent)}
-#playBtn{width:100%;max-width:300px;padding:14px;border-radius:999px;border:0;font:inherit;font-weight:900;font-size:16px;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));cursor:pointer;box-shadow:0 10px 22px -10px var(--accent)}
-#startMini{display:flex;gap:10px;opacity:.75}
-#startMini button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--glass);color:var(--ink);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+#playBtn{flex:1;padding:14px;border-radius:999px;border:0;font:inherit;font-weight:900;font-size:16px;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));cursor:pointer;box-shadow:0 10px 22px -10px var(--accent)}
 #menuBtn{right:14px}#modeBtn{left:14px}
 body.touch #modeBtn{display:flex}
+.profHead{display:flex;align-items:center;gap:14px;padding:2px 0 8px}
+.avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;flex:none}
+.pNameBig{font-size:20px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.statGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.statGrid .stat{flex-direction:column;align-items:flex-start;gap:2px}
+#achDetails summary{cursor:pointer;list-style:none;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:800;padding:8px 2px}
+#achDetails summary::-webkit-details-marker{display:none}
+#achDetails summary::after{content:" ▾"}
+#achDetails[open] summary::after{content:" ▴"}
 .stat,.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--line);font-weight:700;font-size:14px}
 .stat b{font-variant-numeric:tabular-nums}
 .sw small{display:block;color:var(--muted);font-weight:600;font-size:12px;margin-top:2px;line-height:1.4}
@@ -123,13 +140,15 @@ body.touch #modeBtn{display:flex}
     <div id="start">
       <div id="startTitle">Бесконечный <span>сапёр</span></div>
       <div id="startPanel">
-        <div id="startMini"><button data-tab="board" title="Лидеры">🏆</button><button data-tab="profile" title="Профиль">👤</button><button data-tab="settings" title="Настройки">⚙️</button></div>
         <div id="modeRow">
           <button class="modeBtn" data-mode="classic"><b>🧩</b>Классика</button>
           <button class="modeBtn on" data-mode="normal"><b>⚡</b>Обычный</button>
           <button class="modeBtn" data-mode="daily"><b>🔥</b>Вызов дня</button>
         </div>
-        <button id="playBtn">Играть</button>
+        <div id="startRow">
+          <button id="playBtn">Играть</button>
+          <button class="circleBtn glass" id="startMenuBtn" aria-label="Меню">☰</button>
+        </div>
       </div>
     </div>
     <div id="hud">
@@ -162,10 +181,7 @@ body.touch #modeBtn{display:flex}
       <button data-tab="play" class="on">Игра</button><button data-tab="board">Лидеры</button><button data-tab="profile">Профиль</button><button data-tab="settings">Настройки</button><button data-tab="help">Как играть</button>
     </nav>
     <section data-tab="play" class="on">
-      <div class="row">
-        <button class="btn primary" id="newBtn">Новая игра</button>
-        <button class="btn" id="flagBtn" title="Режим флажка">🚩 Флажок</button>
-      </div>
+      <button class="btn primary" id="newBtn" style="width:100%">Новая игра</button>
       <button class="btn" id="dailyBtn" style="width:100%">🔁 Сменить режим</button>
     </section>
     <section data-tab="board">
@@ -173,7 +189,10 @@ body.touch #modeBtn{display:flex}
       <ol id="lb"></ol>
     </section>
     <section data-tab="profile">
-      <h2>Профиль</h2>
+      <div class="profHead">
+        <div class="avatar" id="pAvatar">?</div>
+        <div class="pNameBig" id="pNameBig">Гость</div>
+      </div>
       <div id="authBox" class="col">
         <div class="help">Войди, чтобы попадать в общий рейтинг и хранить статистику на всех устройствах. Нового ника ещё нет — придумай ник и пароль и нажми «Создать профиль».</div>
         <input class="fld" id="aNick" maxlength="16" placeholder="Ник" autocomplete="username" autocapitalize="off">
@@ -183,13 +202,13 @@ body.touch #modeBtn{display:flex}
         <div class="help">Пароль восстановить нельзя — запомни его.</div>
       </div>
       <div id="profBox" class="col hide">
-        <div class="stat">Игрок<b id="pName">Гость</b></div>
-        <div class="stat">Личный рекорд<b id="pBest">0</b></div>
-        <div class="stat">Игр сыграно<b id="pGames">0</b></div>
-        <div class="stat">Раз забрал очки<b id="pBank">0</b></div>
-        <div class="stat">Серия дней<b id="pStreak">0</b></div>
-        <div class="stat">Достижения<b id="pAch">0</b></div>
-        <div class="badges" id="ach"></div>
+        <div class="statGrid">
+          <div class="stat">Рекорд<b id="pBest">0</b></div>
+          <div class="stat">Игр<b id="pGames">0</b></div>
+          <div class="stat">Инкассо<b id="pBank">0</b></div>
+          <div class="stat">Серия<b id="pStreak">0</b></div>
+        </div>
+        <details id="achDetails"><summary>Достижения — <span id="pAch">0/0</span></summary><div class="badges" id="ach"></div></details>
         <button class="btn" id="aOut">Выйти</button>
       </div>
     </section>
@@ -215,7 +234,7 @@ function hex2rgb(h){h=h.replace("#","");if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[
 function mixHex(h1,h2,t){var a=hex2rgb(h1),b=hex2rgb(h2);return "rgb("+Math.round(a[0]+(b[0]-a[0])*t)+","+Math.round(a[1]+(b[1]-a[1])*t)+","+Math.round(a[2]+(b[2]-a[2])*t)+")"}
 var $=function(id){return document.getElementById(id)};
 var born=new Map(),flagBorn=new Map(),overT=0,origin=null,hover=null,anim=0,lastScore=0,MOT=(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)?0:1;
-var shields=0,maxDist=0,recordCelebrated=false,scanInfo=new Map(),kindMap=new Map(),MIN_D=0.12,MAX_D=0.32,GROW_K=16,SCANNER_P=0.010,SHIELD_P=0.008,foundShield=false,foundScanner=false;
+var shields=0,maxDist=0,recordCelebrated=false,scanInfo=new Map(),kindMap=new Map(),MIN_D=0.12,MAX_D=0.32,GROW_K=16,SCANNER_P=0.010,SHIELD_P=0.0035,foundShield=false,foundScanner=false;
 var dailyMode=false,classicMode=false,DLB_KEY="infmine_daily_lb_v2",STREAK_KEY="infmine_streak_v1";
 var FIREBASE_URL="https://moy-saper-default-rtdb.firebaseio.com",bestCache=0,dailyBestCache=0,classicBestCache=0,LBC_KEY="infmine_leaderboard_classic_v1";
 async function fbGet(path){try{var r=await fetch(FIREBASE_URL+"/"+path+".json");if(!r.ok)throw 0;return await r.json()}catch(e){return null}}
@@ -292,18 +311,18 @@ function renderStreak(){
 var ACH_KEY="infmine_ach_v1";
 var ACHIEVEMENTS=[
  {id:"first_bank",icon:"💰",title:"Первая заначка",desc:"Забрал очки в первый раз"},
- {id:"big_flood",icon:"🌊",title:"Цепная реакция",desc:"Открыл 50+ клеток одним кликом"},
+ {id:"big_flood",icon:"🌊",title:"Эпичная лавина",desc:"Открыл 120+ клеток одним кликом"},
  {id:"far_traveler",icon:"🧭",title:"Первопроходец",desc:"Отошёл на 25 клеток от старта"},
  {id:"far_50",icon:"🚀",title:"Далеко зашёл",desc:"Отошёл на 50 клеток от старта"},
  {id:"shield_save",icon:"🛡️",title:"На волосок",desc:"Щит спас от взрыва"},
  {id:"scanner_used",icon:"🔍",title:"Разведка",desc:"Использовал сканер"},
- {id:"double_bonus",icon:"✨",title:"Час удачи",desc:"За одну игру нашёл и сканер, и щит"},
- {id:"record_x3",icon:"📈",title:"Не остановить",desc:"Побил личный рекорд трижды"},
+ {id:"hoarder",icon:"🏦",title:"Заначка",desc:"Накопил 3 щита одновременно"},
  {id:"century",icon:"💯",title:"Сотка",desc:"Набрал 100+ очков за одну партию"},
+ {id:"high_score",icon:"🏆",title:"Высший пилотаж",desc:"Набрал 1000+ очков за одну партию"},
  {id:"streak7",icon:"🔥",title:"Неделя огня",desc:"Серия из 7 дней в вызове дня"},
  {id:"streak30",icon:"🌟",title:"Месяц огня",desc:"Серия из 30 дней в вызове дня"},
  {id:"eight_neighbor",icon:"8️⃣",title:"Восьмёрка",desc:"Открыл клетку, окружённую 8 минами"},
- {id:"classic_run",icon:"🧊",title:"Дедовский способ",desc:"Сыграл партию в «Классике»"}
+ {id:"classic_master",icon:"🧊",title:"Мастер классики",desc:"Набрал 200+ очков в «Классике» за одну партию"}
 ];
 function loadAch(){try{var o=JSON.parse(localStorage.getItem(ACH_KEY)||"{}");return (o&&typeof o==="object")?o:{}}catch(e){return {}}}
 function saveAch(o){try{localStorage.setItem(ACH_KEY,JSON.stringify(o))}catch(e){}}
@@ -337,7 +356,7 @@ function updateHUD(){
     lastScore=score;
     if(!over&&!recordCelebrated){
       var rb=classicMode?classicBestCache:(dailyMode?dailyBestCache:bestCache);
-      if(rb>0&&score>rb){recordCelebrated=true;toast("🎉 Новый рекорд! Сильнее, чем вчера");vib(25);if(bumpRecordBeats()>=3)unlockAch("record_x3","Не остановить")}
+      if(rb>0&&score>rb){recordCelebrated=true;toast("🎉 Новый рекорд! Сильнее, чем вчера");vib(25)}
     }
   }
   $("shieldChip").style.display=shields>0?"":"none"; $("shields").textContent=shields;
@@ -360,22 +379,21 @@ function reveal(x,y){
     var c=q.pop(), k=key(c[0],c[1]);
     if(revealed.has(k)||flags.has(k)||isMine(c[0],c[1]))continue;
     revealed.add(k); born.set(k,t0+Math.min(idx++*7,260)); flood++;
-    var n=count(c[0],c[1]); if(classicMode||n>0)score+=1+n; if(score>=100)unlockAch("century","Сотка");
+    var n=count(c[0],c[1]); if(classicMode||n>0)score+=1+n; if(score>=100)unlockAch("century","Сотка"); if(score>=1000)unlockAch("high_score","Высший пилотаж");
     if(n===8)unlockAch("eight_neighbor","Восьмёрка");
     var d=dist(c[0],c[1]); if(d>maxDist){maxDist=d;if(maxDist>=25)unlockAch("far_traveler","Первопроходец");if(maxDist>=50)unlockAch("far_50","Далеко зашёл")}
     var bk=bonusKind(c[0],c[1]);
     if(bk){
       kindMap.set(k,bk);
-      if(bk==="shield"){shields=Math.min(5,shields+1);toast("🛡️ +1 щит");vib(15);foundShield=true}
+      if(bk==="shield"){shields=Math.min(3,shields+1);toast("🛡️ +1 щит");vib(15);foundShield=true;if(shields>=3)unlockAch("hoarder","Заначка")}
       else{
         for(var sdy=-1;sdy<=1;sdy++)for(var sdx=-1;sdx<=1;sdx++)if(sdx||sdy){var kk=key(c[0]+sdx,c[1]+sdy);if(!revealed.has(kk)&&!flags.has(kk))scanInfo.set(kk,isMine(c[0]+sdx,c[1]+sdy))}
         toast("🔍 Сканер подсветил соседей"); vib(15); unlockAch("scanner_used","Разведка");foundScanner=true;
       }
-      if(foundShield&&foundScanner)unlockAch("double_bonus","Час удачи");
     }
     if(n===0)for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++)if(dx||dy)q.push([c[0]+dx,c[1]+dy]);
   }
-  if(flood>=50)unlockAch("big_flood","Цепная реакция");
+  if(flood>=120)unlockAch("big_flood","Эпичная лавина");
   updateHUD();
 }
 function chord(x,y){
@@ -392,7 +410,7 @@ function toggleFlag(x,y){
 function finish(cashed){
   if(over)return; over=true; overT=performance.now(); updateHUD(); kick();
   if(cashed)unlockAch("first_bank","Первая заначка");
-  if(classicMode)unlockAch("classic_run","Дедовский способ");
+  if(classicMode&&finalVal>=200)unlockAch("classic_master","Мастер классики");
   if(dailyMode){bumpStreak();renderStreak()}
   finalVal=classicMode?score:(cashed?score:Math.floor(score/2));
   var stt=loadStats();stt.games++;if(cashed)stt.cashouts++;if(finalVal>stt.best)stt.best=finalVal;saveStats(stt);syncSoon();
@@ -443,7 +461,6 @@ $("skipBtn").onclick=function(){submit(false)};
 $("newBtn").onclick=newGame;
 $("cash").onclick=function(){finish(true)};
 $("name").addEventListener("keydown",function(e){if(e.key==="Enter")submit(true)});
-$("flagBtn").onclick=function(){setFlagMode(!flagMode,true)};
 $("modeBtn").onclick=function(){setFlagMode(!flagMode,true)};
 $("dailyBtn").onclick=function(){showStart()};
 
@@ -578,15 +595,17 @@ var settings=loadSet();
 function saveSet(){try{localStorage.setItem(SET_KEY,JSON.stringify(settings))}catch(e){}}
 function loadStats(){try{var o=JSON.parse(localStorage.getItem(ST_KEY)||"null");if(o)return {games:o.games|0,cashouts:o.cashouts|0,best:o.best|0}}catch(e){}return {games:0,cashouts:0,best:0}}
 function saveStats(o){try{localStorage.setItem(ST_KEY,JSON.stringify(o))}catch(e){}}
-function setFlagMode(v,persist){flagMode=v;$("flagBtn").classList.toggle("on",v);$("modeBtn").textContent=v?"🚩":"⛏";$("modeBtn").title=v?"Тап ставит флажок":"Тап открывает клетку";$("setTapFlag").checked=v;if(persist){settings.tapFlag=v;saveSet()}}
+function setFlagMode(v,persist){flagMode=v;$("modeBtn").textContent=v?"🚩":"⛏";$("modeBtn").title=v?"Тап ставит флажок":"Тап открывает клетку";$("setTapFlag").checked=v;if(persist){settings.tapFlag=v;saveSet()}}
 $("setTapFlag").onchange=function(){setFlagMode(this.checked,true)};
 $("setVibe").checked=settings.vibe;
 $("setVibe").onchange=function(){settings.vibe=this.checked;saveSet();if(this.checked)vib(15)};
 function renderProfile(){
   var st=loadStats(),o=loadAch(),nm="",n=0;try{nm=localStorage.getItem("infmine_name")||""}catch(e){}
   ACHIEVEMENTS.forEach(function(a){if(o[a.id])n++});
-  $("pName").textContent=auth?auth.name:(nm||"Гость");$("pBest").textContent=st.best;$("pGames").textContent=st.games;$("pBank").textContent=st.cashouts;
-  $("pStreak").textContent=$("streakChip").style.display==="none"?0:$("streak").textContent;$("pAch").textContent=n+" / "+ACHIEVEMENTS.length;
+  var dispName=auth?auth.name:(nm||"Гость");
+  $("pNameBig").textContent=dispName; $("pAvatar").textContent=dispName.charAt(0).toUpperCase();
+  $("pBest").textContent=st.best;$("pGames").textContent=st.games;$("pBank").textContent=st.cashouts;
+  $("pStreak").textContent=$("streakChip").style.display==="none"?0:$("streak").textContent;$("pAch").textContent=n+"/"+ACHIEVEMENTS.length;
 }
 var curTab="play";
 function showTab(t){
@@ -600,7 +619,7 @@ function closeMenu(){document.body.classList.remove("menu")}
 var selMode=classicMode?"classic":(dailyMode?"daily":"normal");
 function markModeBtns(){document.querySelectorAll(".modeBtn").forEach(function(b){b.classList.toggle("on",b.dataset.mode===selMode)})}
 document.querySelectorAll(".modeBtn").forEach(function(b){b.onclick=function(){selMode=b.dataset.mode;markModeBtns()}});
-document.querySelectorAll("#startMini button").forEach(function(b){b.onclick=function(){openMenu();showTab(b.dataset.tab)}});
+$("startMenuBtn").onclick=function(){openMenu()};
 function showStart(){$("start").classList.remove("hidden");cv.style.pointerEvents="none";document.body.classList.add("onstart");markModeBtns()}
 function hideStart(){$("start").classList.add("hidden");cv.style.pointerEvents="auto";document.body.classList.remove("onstart")}
 $("playBtn").onclick=function(){
