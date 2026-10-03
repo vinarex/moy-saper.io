@@ -216,6 +216,7 @@ body.touch #modeBtn{display:flex}
     <section data-tab="settings">
       <h2>Настройки</h2>
       <label class="sw"><span>Флажок по нажатию<small>Тап ставит флажок вместо открытия клетки. На телефоне включено по умолчанию, на ПК выключено.</small></span><input type="checkbox" id="setTapFlag"></label>
+      <label class="sw"><span>Кольцо удержания<small>Индикатор долгого тапа при постановке флажка</small></span><input type="checkbox" id="setPressRing"></label>
       <label class="sw"><span>Звук<small>Короткие звуки при открытии клетки и флажке</small></span><input type="checkbox" id="setSound"></label>
       <label class="sw"><span>Вибрация<small>Отклик при флажках, бонусах и достижениях</small></span><input type="checkbox" id="setVibe"></label>
     </section>
@@ -530,39 +531,44 @@ function draw(){
     }
   }
   if(over&&MOT&&now-overT<1300)busy=true;
-  if(pressActive&&pressCell){
-    var pw=cv.clientWidth,ph=cv.clientHeight,ps=CELL*zoom;
-    var pcx=(pressCell.x-cam.x)*ps+pw/2+ps/2, pcy=(pressCell.y-cam.y)*ps+ph/2+ps/2;
-    var pt=Math.min(1,(now-pressStart)/PRESS_MS), pr=ps*0.92;
-    ctx.save();
-    ctx.beginPath(); ctx.moveTo(pcx,pcy); ctx.arc(pcx,pcy,pr,-Math.PI/2,-Math.PI/2+pt*Math.PI*2); ctx.closePath();
-    ctx.fillStyle="rgba(255,255,255,.4)"; ctx.fill();
-    ctx.lineWidth=ps*0.05; ctx.strokeStyle="rgba(255,255,255,.75)";
-    ctx.beginPath(); ctx.arc(pcx,pcy,pr,0,Math.PI*2); ctx.stroke();
-    ctx.restore();
+  if(pressActive&&pressCell&&(!settings||settings.pressRing!==false)){
+    var held=now-pressStart;
+    if(held>PRESS_SHOW_DELAY){
+      var pw=cv.clientWidth,ph=cv.clientHeight,ps=CELL*zoom;
+      var pcx=(pressCell.x-cam.x)*ps+pw/2+ps/2, pcy=(pressCell.y-cam.y)*ps+ph/2+ps/2;
+      var pt=Math.min(1,held/PRESS_MS), pr=ps*0.92;
+      ctx.save();
+      ctx.lineWidth=ps*0.11; ctx.lineCap="round"; ctx.strokeStyle="rgba(255,255,255,.22)";
+      ctx.beginPath(); ctx.arc(pcx,pcy,pr,0,Math.PI*2); ctx.stroke();
+      ctx.strokeStyle="rgba(255,255,255,.85)";
+      ctx.beginPath(); ctx.arc(pcx,pcy,pr,-Math.PI/2,-Math.PI/2+pt*Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
     busy=true;
   }
   if(busy)kick();
 }
 
-var drag=null, pts=new Map(), pinch=null, pressT=null, pressFired=false, pressActive=false, pressStart=0, pressCell=null, PRESS_MS=420;
+var drag=null, pts=new Map(), pinch=null, pressT=null, pressFired=false, pressActive=false, pressStart=0, pressCell=null, PRESS_MS=420, PRESS_SHOW_DELAY=140;
 function vib(ms){if(settings&&settings.vibe===false)return;if(navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
 var actx=null;
 function ensureAudio(){if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}return actx}
 function soundOn(){return !(settings&&settings.sound===false)}
 function sndOpen(){
   if(!soundOn())return; var ctx=ensureAudio(); if(!ctx)return; if(ctx.state==="suspended")ctx.resume();
-  var o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime;
-  o.type="sine"; o.frequency.setValueAtTime(680,t); o.frequency.exponentialRampToValueAtTime(320,t+0.09);
-  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.16,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+0.12);
-  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.14);
+  var o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain(),t=ctx.currentTime;
+  o.type="sine"; o.frequency.setValueAtTime(260,t); o.frequency.exponentialRampToValueAtTime(110,t+0.14);
+  f.type="lowpass"; f.frequency.value=520; f.Q.value=0.5;
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22,t+0.012); g.gain.exponentialRampToValueAtTime(0.0001,t+0.17);
+  o.connect(f); f.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.19);
 }
 function sndFlag(){
   if(!soundOn())return; var ctx=ensureAudio(); if(!ctx)return; if(ctx.state==="suspended")ctx.resume();
-  var o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime;
-  o.type="square"; o.frequency.setValueAtTime(1500,t);
-  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.09,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.05);
-  o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.06);
+  var o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain(),t=ctx.currentTime;
+  o.type="triangle"; o.frequency.setValueAtTime(220,t); o.frequency.exponentialRampToValueAtTime(140,t+0.07);
+  f.type="lowpass"; f.frequency.value=420; f.Q.value=0.5;
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.16,t+0.006); g.gain.exponentialRampToValueAtTime(0.0001,t+0.08);
+  o.connect(f); f.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.1);
 }
 function cellAt(e){var r=cv.getBoundingClientRect(),s=CELL*zoom;return {x:Math.floor((e.clientX-r.left-r.width/2)/s+cam.x),y:Math.floor((e.clientY-r.top-r.height/2)/s+cam.y)}}
 function cellAtF(e){var r=cv.getBoundingClientRect(),s=CELL*zoom;return {x:(e.clientX-r.left-r.width/2)/s+cam.x,y:(e.clientY-r.top-r.height/2)/s+cam.y}}
@@ -631,7 +637,7 @@ window.addEventListener("keydown",function(e){
 });
 
 var SET_KEY="infmine_settings_v1",ST_KEY="infmine_stats_v1",IS_TOUCH=!!(window.matchMedia&&matchMedia("(pointer:coarse)").matches);
-function loadSet(){var d={tapFlag:IS_TOUCH,vibe:true,sound:true};try{var o=JSON.parse(localStorage.getItem(SET_KEY)||"null");if(o&&typeof o==="object"){if(typeof o.tapFlag==="boolean")d.tapFlag=o.tapFlag;if(typeof o.vibe==="boolean")d.vibe=o.vibe;if(typeof o.sound==="boolean")d.sound=o.sound}}catch(e){}return d}
+function loadSet(){var d={tapFlag:IS_TOUCH,vibe:true,sound:true,pressRing:true};try{var o=JSON.parse(localStorage.getItem(SET_KEY)||"null");if(o&&typeof o==="object"){if(typeof o.tapFlag==="boolean")d.tapFlag=o.tapFlag;if(typeof o.vibe==="boolean")d.vibe=o.vibe;if(typeof o.sound==="boolean")d.sound=o.sound;if(typeof o.pressRing==="boolean")d.pressRing=o.pressRing}}catch(e){}return d}
 var settings=loadSet();
 function saveSet(){try{localStorage.setItem(SET_KEY,JSON.stringify(settings))}catch(e){}}
 function loadStats(){try{var o=JSON.parse(localStorage.getItem(ST_KEY)||"null");if(o)return {games:o.games|0,cashouts:o.cashouts|0,best:o.best|0}}catch(e){}return {games:0,cashouts:0,best:0}}
@@ -642,6 +648,8 @@ $("setVibe").checked=settings.vibe;
 $("setVibe").onchange=function(){settings.vibe=this.checked;saveSet();if(this.checked)vib(15)};
 $("setSound").checked=settings.sound;
 $("setSound").onchange=function(){settings.sound=this.checked;saveSet();if(this.checked)sndOpen()};
+$("setPressRing").checked=settings.pressRing;
+$("setPressRing").onchange=function(){settings.pressRing=this.checked;saveSet()};
 function renderProfile(){
   var st=loadStats(),o=loadAch(),nm="",n=0;try{nm=localStorage.getItem("infmine_name")||""}catch(e){}
   ACHIEVEMENTS.forEach(function(a){if(o[a.id])n++});
